@@ -1,0 +1,36 @@
+# Git Proxy Server - Elysia Project Rules
+
+## Core Technologies
+- **Runtime**: Bun
+- **Framework**: Elysia
+- **Language**: TypeScript
+- **Architecture**: REST API Proxy for Git Operations
+
+## Project Structure
+```
+src/
+├── index.ts          # Main server entry
+├── routes/           # API route handlers
+├── services/         # Git command services
+├── middleware/       # CORS and auth middleware
+└── types/            # TypeScript type definitions
+```
+
+## Key Patterns
+- Use Elysia's type-safe routing and validation
+- Implement proper CORS for web client access
+- Secure git command execution with validation
+- Error handling for git operations
+- Request/response logging for debugging
+
+## Security Considerations
+- Validate all git commands before execution
+- Sanitize file paths and repository URLs
+- Implement rate limiting for git operations
+- Use allowlist for permitted git commands
+- Never expose sensitive git credentials
+
+## Dependencies
+- @elysiajs/cors - CORS middleware
+- @octokit/rest - Git operations (referenced by clients)
+- Additional security and validation packages as needed 
