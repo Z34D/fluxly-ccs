@@ -21,7 +21,7 @@ export default {
      * @param ctx - Execution context for the Worker
      * @returns Response from the Git CORS Proxy
      */
-    async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    async fetch(request: Request, env: Env): Promise<Response> {
         // Set production defaults (both false for security and performance)
         const envWithDefaults: Env = {
             ...env,
