@@ -26,10 +26,6 @@ export interface HealthResponse {
   service: string;
   /** Service version */
   version: string;
-  /** Timestamp of health check */
-  timestamp: string;
-  /** Uptime in milliseconds */
-  uptime: number;
   /** Additional details if enabled */
   details?: {
     /** Memory usage information */
@@ -70,9 +66,7 @@ export interface HealthResponse {
  * // {
  * //   "status": "healthy",
  * //   "service": "Git CORS Proxy",
- * //   "version": "1.0.50",
- * //   "timestamp": "2024-12-19T10:30:00.000Z",
- * //   "uptime": 123456
+ * //   "version": "1.0.50"
  * // }
  * ```
  */
@@ -85,24 +79,16 @@ export const health = (options: HealthOptions = {}) => {
     version = '1.1.0' // Default from package.json
   } = options;
 
-  // Track service start time for uptime calculation
-  const startTime = Date.now();
-
   /**
    * Generates health check response with current system status
    * 
    * @returns Health response object with status and system information
    */
   const generateHealthResponse = (): HealthResponse => {
-    const now = Date.now();
-    const uptime = now - startTime;
-
     const response: HealthResponse = {
       status: 'healthy',
       service: serviceName,
-      version,
-      timestamp: new Date(now).toISOString(),
-      uptime
+      version
     };
 
     // Add detailed system information if requested
@@ -126,7 +112,7 @@ export const health = (options: HealthOptions = {}) => {
     /**
      * Health check endpoint
      * 
-     * Returns service status, version, and uptime information.
+     * Returns service status, version information.
      * Used by load balancers and monitoring systems to verify service health.
      */
     .get(path, ({ set }) => {
@@ -137,7 +123,7 @@ export const health = (options: HealthOptions = {}) => {
       set.headers['Content-Type'] = 'application/json';
       
       if (enableLogging) {
-        console.log(`🏥 Health Check: ${healthResponse.status} - ${healthResponse.service} v${healthResponse.version} (uptime: ${Math.round(healthResponse.uptime / 1000)}s)`);
+        console.log(`🏥 Health Check: ${healthResponse.status} - ${healthResponse.service} v${healthResponse.version}`);
       }
       
       return healthResponse;
