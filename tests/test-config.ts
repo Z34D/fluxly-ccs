@@ -1,4 +1,4 @@
-// Test configuration for Git CORS Proxy tests
+// Test configuration for Git CORS Proxy tests (Hono version)
 export const TEST_CONFIG = {
   // Test server configuration
   SERVER: {
@@ -66,6 +66,11 @@ export const HEADERS = {
     "User-Agent": "git/2.34.1"
   },
   
+  NON_GIT_CLIENT: {
+    "Origin": TEST_CONFIG.SERVER.BASE_URL,
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  },
+  
   AUTHENTICATED_GIT: (token: string) => ({
     "Origin": TEST_CONFIG.SERVER.BASE_URL,
     "Authorization": `token ${token}`,
@@ -86,6 +91,7 @@ export const HEADERS = {
 // Test URL builders
 export const buildTestUrls = (baseUrl: string) => ({
   root: () => `${baseUrl}/`,
+  health: () => `${baseUrl}/health`,
   test: () => `${baseUrl}/test`,
   publicRepoInfoRefs: (service: string = "git-upload-pack") => 
     `${baseUrl}/${TEST_CONFIG.GITHUB.DOMAIN}/${TEST_CONFIG.REPOSITORIES.PUBLIC}.git/info/refs?service=${service}`,
@@ -101,3 +107,17 @@ export const buildTestUrls = (baseUrl: string) => ({
   nonGitRequest: () => `${baseUrl}/${TEST_CONFIG.GITHUB.DOMAIN}/not-a-git-request`,
   nonGitPost: () => `${baseUrl}/${TEST_CONFIG.GITHUB.DOMAIN}/not-git-post`
 }); 
+
+// Hono-specific test utilities
+export const createTestServer = (app: any, port: number = TEST_CONFIG.SERVER.PORT) => {
+  return Bun.serve({
+    port,
+    fetch: app.fetch,
+  });
+};
+
+export const stopTestServer = (server: any) => {
+  if (server && server.stop) {
+    server.stop();
+  }
+}; 
