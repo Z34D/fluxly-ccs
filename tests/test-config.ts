@@ -1,4 +1,4 @@
-// Test configuration for Git CORS Proxy tests (Hono version)
+// Test configuration for Fluxly-CCS tests (Hono version)
 export const TEST_CONFIG = {
   // Test server configuration
   SERVER: {

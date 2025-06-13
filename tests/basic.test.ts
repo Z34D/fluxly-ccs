@@ -21,7 +21,7 @@ declare module 'bun:test' {
   }
 }
 
-describe('Git CORS Proxy (Hono) - Comprehensive Test Suite', () => {
+describe('Fluxly-CCS - Comprehensive Test Suite', () => {
   let server: any;
   const urls = buildTestUrls(TEST_CONFIG.SERVER.BASE_URL);
 
@@ -69,7 +69,7 @@ describe('Git CORS Proxy (Hono) - Comprehensive Test Suite', () => {
       expect(response.headers.get('content-type')).toContain('text/html');
       
       const html = await response.text();
-      expect(html).toContain('Git CORS Proxy Server (Hono)');
+      expect(html).toContain('Fluxly-CCS');
       expect(html).toContain('github.com/user/repo.git');
     });
   });
