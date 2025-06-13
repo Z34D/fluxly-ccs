@@ -189,8 +189,8 @@ export const app = (env: Env) => {
     }))
     .use(health({ 
       enableLogging,
-      serviceName: 'Git CORS Proxy',
-      version: '1.0.50'
+      serviceName: 'Fluxly-CCS',
+      version: '1.1.0'
     }))
     
     /**
