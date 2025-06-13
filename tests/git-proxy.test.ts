@@ -48,14 +48,10 @@ describe("Git CORS Proxy Server", () => {
         status: string; 
         service: string; 
         version: string; 
-        timestamp: string; 
-        uptime: number 
       };
       expect(json.status).toBe("healthy");
-      expect(json.service).toBe("Git CORS Proxy");
-      expect(json.version).toBe("1.0.50");
-      expect(json.timestamp).toBeTruthy();
-      expect(json.uptime).toBeGreaterThanOrEqual(0);
+      expect(json.service).toBe("Fluxly-CCS");
+      expect(json.version).toBe("1.1.0");
     });
   });
 
