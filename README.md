@@ -1,4 +1,4 @@
-# Git CORS Proxy
+# Fluxly-CCS
 
 A production-ready CORS-enabled proxy server for Git operations, built with Elysia and TypeScript. Enables web applications to interact with Git repositories through HTTP requests by providing CORS headers and proxying Git protocol requests.
 
@@ -147,8 +147,8 @@ Returns server health status, version, and uptime information.
 ```json
 {
   "status": "healthy",
-  "service": "Git CORS Proxy",
-  "version": "1.0.50",
+  "service": "Fluxly-CCS",
+  "version": "1.1.0",
   "timestamp": "2024-12-19T10:30:00.000Z",
   "uptime": 1234567
 }
@@ -195,7 +195,7 @@ PORT=8080 CORS_ENABLE_LOGGING=true bun run dev
 
 1. **Configure wrangler.toml:**
 ```toml
-name = "git-cors-proxy"
+name = "fluxly-ccs"
 main = "src/cloudflare.ts"
 compatibility_date = "2024-12-19"
 
