@@ -6,7 +6,6 @@
     "test:watch": "bun test --watch",
     "test:coverage": "bun test --coverage",
     "dev": "bun run --watch src/index.ts",
-    "deploy-cf": "wrangler deploy src/cloudflare.ts",
     "start": "bun run src/index.ts"
   },
   "dependencies": {

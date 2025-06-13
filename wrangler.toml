@@ -1,6 +1,7 @@
 name = "fluxly-ccs"
 main = "src/cloudflare.ts"
 compatibility_date = "2025-06-13"
+nodejs_compat = true
 
 [env.production.vars]
 ALLOWED_ORIGINS = "https://fluxly.app"
