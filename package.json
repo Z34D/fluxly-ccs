@@ -5,7 +5,9 @@
     "test": "bun test",
     "test:watch": "bun test --watch",
     "test:coverage": "bun test --coverage",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "deploy-cf": "wrangler deploy src/cloudflare.ts",
+    "start": "bun run src/index.ts"
   },
   "dependencies": {
     "@cloudflare/workers-types": "^4.20250612.0",
