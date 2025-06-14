@@ -23,7 +23,7 @@
 
 🎯 **COMPLETE**: Fix Authentication Header Bug ✅
 **Task**: Fix 400 errors when Authorization header is present in Git requests  
-**Status**: Successfully fixed - Auth flow now works correctly (401 → auth → 200) matching original proxy behavior
+**Status**: Successfully fixed and deployed to production - Auth flow now works correctly (401 → auth → 200) matching original proxy behavior
 
 **Issue Identified**: Request body ReadableStream was becoming locked/consumed when forwarding authenticated requests, causing 400 errors
 
@@ -31,7 +31,14 @@
 - Fixed `makeProxyRequest` function in `src/handlers/proxy-handler.ts`
 - Added proper request body cloning to avoid ReadableStream locking
 - Enhanced authentication logging for better debugging
+- **Added comprehensive debugging**: URL parsing and error reporting for better troubleshooting
 - Preserved all existing functionality while fixing the auth bug
+
+**Deployment**:
+- ✅ Successfully deployed to `fluxly-ccs.fluxly.workers.dev`
+- ✅ Version ID: `0f666f9e-ff43-483d-a93b-98bd85c9470e`
+- ✅ Total Upload: 37.96 KiB / gzip: 13.92 KiB
+- ✅ Worker Startup Time: 11 ms
 
 **Testing Results**:
 - All 82 tests passing (4 skipped due to missing GitHub token)
@@ -40,6 +47,8 @@
 - No breaking changes to existing functionality
 - Enhanced debugging logs for auth header handling
 - Test specifically verifies no 400 errors occur due to ReadableStream locking
+
+**Note**: If still experiencing issues with `ccs.fluxly.app`, check custom domain routing as the Worker deployed to `fluxly-ccs.fluxly.workers.dev`
 
 ## Test Migration Completion ✅
 

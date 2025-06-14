@@ -49,18 +49,36 @@ export interface ProxyUrlParts {
  */
 export const parseProxyUrl = (url: URL, env: Env): ProxyUrlParts | null => {
   const path = url.pathname
+  const enableLogging = env.CORS_ENABLE_LOGGING?.toLowerCase() === 'true'
+  
+  if (enableLogging) {
+    console.log(`🔍 PARSING URL: ${path}`)
+  }
+  
   const parts = path.match(/\/([^\/]+)\/(.*)/)
   
   if (!parts) {
+    if (enableLogging) {
+      console.log(`❌ URL PARSE FAILED: "${path}" does not match expected pattern /domain/path`)
+      console.log(`❌ Expected format: /github.com/user/repo.git/info/refs`)
+    }
     return null
   }
 
   const [, domain, remainingPath] = parts
   
+  if (enableLogging) {
+    console.log(`✅ URL PARSED: domain="${domain}", path="${remainingPath}"`)
+  }
+  
   // Determine protocol based on insecure origins configuration
   const insecureOrigins = (env.INSECURE_HTTP_ORIGINS || '').split(',')
   const protocol = insecureOrigins.includes(domain) ? 'http' : 'https'
   const targetUrl = `${protocol}://${domain}/${remainingPath}${url.search}`
+
+  if (enableLogging) {
+    console.log(`🌐 TARGET URL: ${targetUrl}`)
+  }
 
   return {
     domain,
@@ -209,8 +227,15 @@ export const validateProxyDomain = (domain: string): boolean => {
  * @returns {Response} Error response with usage instructions
  */
 export const createInvalidUrlResponse = (context: any): Response => {
+  const requestUrl = context.req.raw.url
+  const url = new URL(requestUrl)
+  
+  console.log(`❌ INVALID URL: ${url.pathname}`)
+  console.log(`❌ Full URL: ${requestUrl}`)
+  console.log(`❌ Expected format: /github.com/user/repo.git/info/refs`)
+  
   context.status(400)
-  return context.text("Invalid proxy URL format. Use /domain.com/path/to/repo")
+  return context.text(`Invalid proxy URL format. Got: "${url.pathname}". Expected: /domain.com/path/to/repo`)
 }
 
 /**
