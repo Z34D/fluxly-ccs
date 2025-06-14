@@ -90,7 +90,6 @@ export const HEADERS = {
 
 // Test URL builders
 export const buildTestUrls = (baseUrl: string) => ({
-  root: () => `${baseUrl}/`,
   health: () => `${baseUrl}/health`,
   test: () => `${baseUrl}/test`,
   publicRepoInfoRefs: (service: string = "git-upload-pack") => 

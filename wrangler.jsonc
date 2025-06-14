@@ -8,8 +8,8 @@
   ],
   "vars": {
     "ALLOWED_ORIGINS": "https://fluxly.app",
-    "CORS_ALLOW_LOCALHOST": "false",
-    "CORS_ENABLE_LOGGING": "false"
+    "CORS_ALLOW_LOCALHOST": "true",
+    "CORS_ENABLE_LOGGING": "true"
   },
   "observability": {
     "enabled": true

@@ -31,7 +31,9 @@ export const GIT_SERVICES = [
  */
 export const GIT_PATHS = [
   '/info/refs',         // Git info/refs endpoint
-  '.git/'              // Any path containing .git/
+  '.git/',              // Any path containing .git/
+  'git-upload-pack',    // Git fetch/clone operations endpoint
+  'git-receive-pack'    // Git push operations endpoint
 ] as const
 
 /**

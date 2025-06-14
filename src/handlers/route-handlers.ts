@@ -55,66 +55,7 @@ export const handleHealth = (c: Context): Response => {
   return c.json(createHealthResponse())
 }
 
-/**
- * Handles requests to the root endpoint.
- * 
- * Returns an HTML information page with usage instructions,
- * server features, and example usage patterns.
- * 
- * @param {Context} c - Hono context object
- * @returns {Response} HTML response with server information
- * 
- * @example
- * ```typescript
- * // GET /
- * const response = await handleRoot(c)
- * // Returns: HTML page with server documentation
- * ```
- */
-export const handleRoot = (c: Context): Response => {
-  return c.html(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Fluxly-CCS</title>
-      <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .header { color: #2563eb; }
-        .code { background: #f3f4f6; padding: 20px; border-radius: 8px; }
-        .method { color: #059669; font-weight: bold; }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <h1 class="header">🦊 Fluxly-CCS</h1>
-        <p>This server provides CORS-enabled proxy access to Git repositories.</p>
-        
-        <h2>Usage</h2>
-        <div class="code">
-          <p><span class="method">GET/POST</span> /{domain}/{path/to/repo}</p>
-          <p><strong>Example:</strong> /github.com/user/repo.git/info/refs?service=git-upload-pack</p>
-        </div>
-        
-        <h2>Features</h2>
-        <ul>
-          <li>✅ CORS support for web applications</li>
-          <li>✅ Git protocol proxy (upload-pack, receive-pack)</li>
-          <li>✅ Authentication header forwarding</li>
-          <li>✅ Secure origin validation</li>
-          <li>✅ Optimized for Cloudflare Workers</li>
-        </ul>
-        
-        <h2>Health</h2>
-        <p>Check server status: <a href="/health">/health</a></p>
-        
-        <hr>
-        <p><em>Powered by Hono • Ported from ElysiaJS</em></p>
-      </div>
-    </body>
-    </html>
-  `)
-}
+
 
 /**
  * Handles CORS preflight OPTIONS requests.

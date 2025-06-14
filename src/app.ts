@@ -14,7 +14,6 @@ import type { Env } from './types/environment'
 import { logStartup } from './config/server-config'
 import {
   handleHealth,
-  handleRoot,
   handleOptions,
   handleUniversal
 } from './handlers/route-handlers'
@@ -24,7 +23,6 @@ import {
  * 
  * Sets up all routes and handlers for Fluxly-CCS:
  * - Health check endpoint
- * - Root information page
  * - CORS preflight handler
  * - Universal Git proxy router
  * 
@@ -47,13 +45,7 @@ export const createApp = (): Hono<{ Bindings: Env }> => {
    */
   app.get('/health', handleHealth)
 
-  /**
-   * Root endpoint with server information and usage documentation.
-   * 
-   * @route GET /
-   * @returns {string} HTML page with server documentation
-   */
-  app.get('/', handleRoot)
+
 
   /**
    * CORS preflight handler for all routes.
@@ -89,15 +81,7 @@ export const createApp = (): Hono<{ Bindings: Env }> => {
  */
 const app = createApp()
 
-/**
- * Initializes the server in development mode.
- * 
- * Logs startup information and configuration when running
- * in a local development environment.
- */
-if (typeof process !== 'undefined' && process.env) {
-  logStartup(process.env as Env)
-}
+
 
 /**
  * Export the configured Hono application.

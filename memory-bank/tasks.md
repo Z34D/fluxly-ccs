@@ -1,6 +1,26 @@
 # Git Proxy Server - Tasks
 
+## Current Task: Fix Git POST Request Detection 
+**Status**: Complete ✅
+**Level**: 2 (Simple Enhancement/Bug Fix)
+**Started**: 2024-06-13
+**Completed**: 2024-06-13
+
+### Task Breakdown
+- [x] Analyze 403 error for POST requests to git-upload-pack endpoints
+- [x] Identify missing Git path patterns in detection constants
+- [x] Add git-upload-pack and git-receive-pack to GIT_PATHS
+- [x] Test the fix with comprehensive test suite
+- [x] Verify Git detection works for all endpoint types
+
+**Issue**: POST requests to `/github.com/user/repo/git-upload-pack` returning 403 "Forbidden - Not a Git request"
+**Root Cause**: Git detection only looked for `/info/refs` and `.git/` paths, missing direct `git-upload-pack` and `git-receive-pack` endpoints
+**Fix Applied**: Added `git-upload-pack` and `git-receive-pack` to GIT_PATHS constants for proper Git request detection
+**Test Results**: ✅ All tests passing (27 pass, 4 skip, 0 fail) - Git POST requests now properly detected and proxied
+
 ## Completed Tasks
+- [X] Extend Test Suite with Git Detection Functionality Tests - Completed on 2024-12-19
+- [X] Fix Git POST Request Detection - Completed on 2024-06-13
 - [X] Refactor Codebase into Modular Architecture with JSDoc - Completed on 2024-12-19
 
 ## Current Task: Refactor Codebase into Modular Architecture with JSDoc
@@ -307,6 +327,15 @@ set.headers['Access-Control-Allow-Origin'] = '*';
 ## Current Tasks
 
 ### Recently Completed
+- [X] **Route Cleanup and Server Entry Point** - Completed 2024-12-19
+  - [X] Remove root route (handleRoot) from route handlers
+  - [X] Remove root route test from test suite
+  - [X] Remove dev mode startup messages from app.ts
+  - [X] Create separate server.ts entry point for `bun run start`
+  - [X] Update package.json start script to use server.ts
+  - [X] Configure proper environment variable handling for local server
+  - [X] Maintain Cloudflare compatibility with index.ts
+
 - [X] **Naming Convention Updates** - Completed 2024-12-19
   - [X] Update all JSDoc comments from "Git CORS Proxy Server" to "Fluxly-CCS"
   - [X] Update all @author tags from "Git CORS Proxy Team" to "Fluxly"  
@@ -817,177 +846,24 @@ bun test
 
 **Next Steps**: Task complete, token now properly secured
 
-## Current Task: Port All Tests from Old Directory
-
-## Current Task: Refactor Codebase into Modular Architecture with JSDoc
-**Status**: In Progress
-**Level**: 3 (Intermediate Feature)
+## Current Task: Extend Test Suite with Git Detection Functionality Tests
+**Status**: Complete ✅
+**Level**: 2 (Simple Enhancement)
 **Started**: 2024-12-19
+**Completed**: 2024-12-19
 
 ### Task Breakdown
-[ ] Analyze current code structure and identify logical modules
-[ ] **CREATIVE PHASE: Module Architecture Planning** - Design optimal module structure
-[ ] Create types/ directory with TypeScript interfaces
-[ ] Create utils/ directory with utility functions
-[ ] Create middleware/ directory with Hono middleware
-[ ] Create routes/ directory with route handlers  
-[ ] Create config/ directory with configuration
-[ ] Add comprehensive JSDoc documentation to all modules
-[ ] Test refactored structure maintains functionality
-[ ] Update imports and ensure no breaking changes
-[ ] Update documentation and Memory Bank files
+[X] Analyze Git detection utility functions to understand test requirements
+[X] Create new test file for Git detection functionality  
+[X] Implement tests for `isGitRequest()` function with various scenarios
+[X] Implement tests for `hasGitServiceParameter()` function
+[X] Implement tests for `hasGitPath()` function  
+[X] Implement tests for `hasGitUserAgent()` function
+[X] Implement tests for `extractGitService()` function
+[X] Implement tests for `isGitCloneRequest()` function
+[X] Implement tests for `isGitPushRequest()` function
+[X] Add edge case tests for malformed URLs and headers
+[X] Integrate tests with main test suite and verify execution
+[X] Update test documentation and verify all tests pass
 
-**Objective**: Split monolithic index.ts into logical, maintainable modules with kebab-case naming and comprehensive JSDoc documentation
-
-**Requirements**:
-- File naming: Use kebab-case convention
-- Documentation: Add JSDoc to all functions, interfaces, and modules
-- Architecture: Logical separation of concerns
-- Functionality: No breaking changes to existing API
-
-**Creative Phases Required**: 
-- **Module Architecture Planning**: Design optimal module structure and dependencies
-
-## Current Task: Refactor Codebase into Modular Architecture with JSDoc
-**Status**: In Progress
-**Level**: 3 (Intermediate Feature)
-**Started**: 2024-12-19
-
-### Task Breakdown
-[ ] Analyze current code structure and identify logical modules
-[ ] **CREATIVE PHASE: Module Architecture Planning** - Design optimal module structure
-[ ] Create types/ directory with TypeScript interfaces
-[ ] Create utils/ directory with utility functions
-[ ] Create middleware/ directory with Hono middleware
-[ ] Create routes/ directory with route handlers  
-[ ] Create config/ directory with configuration
-[ ] Add comprehensive JSDoc documentation to all modules
-[ ] Test refactored structure maintains functionality
-[ ] Update imports and ensure no breaking changes
-[ ] Update documentation and Memory Bank files
-
-**Objective**: Split monolithic index.ts into logical, maintainable modules with kebab-case naming and comprehensive JSDoc documentation
-
-**Requirements**:
-- File naming: Use kebab-case convention
-- Documentation: Add JSDoc to all functions, interfaces, and modules
-- Architecture: Logical separation of concerns
-- Functionality: No breaking changes to existing API
-
-**Creative Phases Required**: 
-- **Module Architecture Planning**: Design optimal module structure and dependencies
-
-## Current Task: Refactor Codebase into Modular Architecture with JSDoc
-**Status**: In Progress
-**Level**: 3 (Intermediate Feature)
-**Started**: 2024-12-19
-
-### Task Breakdown
-[ ] Analyze current code structure and identify logical modules
-[ ] **CREATIVE PHASE: Module Architecture Planning** - Design optimal module structure
-[ ] Create types/ directory with TypeScript interfaces
-[ ] Create utils/ directory with utility functions
-[ ] Create middleware/ directory with Hono middleware
-[ ] Create routes/ directory with route handlers  
-[ ] Create config/ directory with configuration
-[ ] Add comprehensive JSDoc documentation to all modules
-[ ] Test refactored structure maintains functionality
-[ ] Update imports and ensure no breaking changes
-[ ] Update documentation and Memory Bank files
-
-**Objective**: Split monolithic index.ts into logical, maintainable modules with kebab-case naming and comprehensive JSDoc documentation
-
-**Requirements**:
-- File naming: Use kebab-case convention
-- Documentation: Add JSDoc to all functions, interfaces, and modules
-- Architecture: Logical separation of concerns
-- Functionality: No breaking changes to existing API
-
-**Creative Phases Required**: 
-- **Module Architecture Planning**: Design optimal module structure and dependencies
-
-## Current Task: Refactor Codebase into Modular Architecture with JSDoc
-**Status**: In Progress
-**Level**: 3 (Intermediate Feature)
-**Started**: 2024-12-19
-
-### Task Breakdown
-[ ] Analyze current code structure and identify logical modules
-[ ] **CREATIVE PHASE: Module Architecture Planning** - Design optimal module structure
-[ ] Create types/ directory with TypeScript interfaces
-[ ] Create utils/ directory with utility functions
-[ ] Create middleware/ directory with Hono middleware
-[ ] Create routes/ directory with route handlers  
-[ ] Create config/ directory with configuration
-[ ] Add comprehensive JSDoc documentation to all modules
-[ ] Test refactored structure maintains functionality
-[ ] Update imports and ensure no breaking changes
-[ ] Update documentation and Memory Bank files
-
-**Objective**: Split monolithic index.ts into logical, maintainable modules with kebab-case naming and comprehensive JSDoc documentation
-
-**Requirements**:
-- File naming: Use kebab-case convention
-- Documentation: Add JSDoc to all functions, interfaces, and modules
-- Architecture: Logical separation of concerns
-- Functionality: No breaking changes to existing API
-
-**Creative Phases Required**: 
-- **Module Architecture Planning**: Design optimal module structure and dependencies
-
-## Current Task: Refactor Codebase into Modular Architecture with JSDoc
-**Status**: In Progress
-**Level**: 3 (Intermediate Feature)
-**Started**: 2024-12-19
-
-### Task Breakdown
-[ ] Analyze current code structure and identify logical modules
-[ ] **CREATIVE PHASE: Module Architecture Planning** - Design optimal module structure
-[ ] Create types/ directory with TypeScript interfaces
-[ ] Create utils/ directory with utility functions
-[ ] Create middleware/ directory with Hono middleware
-[ ] Create routes/ directory with route handlers  
-[ ] Create config/ directory with configuration
-[ ] Add comprehensive JSDoc documentation to all modules
-[ ] Test refactored structure maintains functionality
-[ ] Update imports and ensure no breaking changes
-[ ] Update documentation and Memory Bank files
-
-**Objective**: Split monolithic index.ts into logical, maintainable modules with kebab-case naming and comprehensive JSDoc documentation
-
-**Requirements**:
-- File naming: Use kebab-case convention
-- Documentation: Add JSDoc to all functions, interfaces, and modules
-- Architecture: Logical separation of concerns
-- Functionality: No breaking changes to existing API
-
-**Creative Phases Required**: 
-- **Module Architecture Planning**: Design optimal module structure and dependencies
-
-## Current Task: Refactor Codebase into Modular Architecture with JSDoc
-**Status**: In Progress
-**Level**: 3 (Intermediate Feature)
-**Started**: 2024-12-19
-
-### Task Breakdown
-[ ] Analyze current code structure and identify logical modules
-[ ] **CREATIVE PHASE: Module Architecture Planning** - Design optimal module structure
-[ ] Create types/ directory with TypeScript interfaces
-[ ] Create utils/ directory with utility functions
-[ ] Create middleware/ directory with Hono middleware
-[ ] Create routes/ directory with route handlers  
-[ ] Create config/ directory with configuration
-[ ] Add comprehensive JSDoc documentation to all modules
-[ ] Test refactored structure maintains functionality
-[ ] Update imports and ensure no breaking changes
-[ ] Update documentation and Memory Bank files
-
-**Objective**: Split monolithic index.ts into logical, maintainable modules with kebab-case naming and comprehensive JSDoc documentation
-
-**Requirements**:
-- File naming: Use kebab-case convention
-- Documentation: Add JSDoc to all functions, interfaces, and modules
-- Architecture: Logical separation of concerns
-- Functionality: No breaking changes to existing API
-
-**Creative Phases Required**: 
+**Objective**: Add comprehensive tests for the modularized Git detection functionality that was previously in the deleted `test-git-detection.js`

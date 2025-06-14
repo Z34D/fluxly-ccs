@@ -61,18 +61,7 @@ describe('Fluxly-CCS - Comprehensive Test Suite', () => {
     });
   });
 
-  describe('Root Endpoint', () => {
-    test('GET / returns HTML information page', async () => {
-      const response = await fetch(urls.root());
-      
-      expect(response.status).toBe(200);
-      expect(response.headers.get('content-type')).toContain('text/html');
-      
-      const html = await response.text();
-      expect(html).toContain('Fluxly-CCS');
-      expect(html).toContain('github.com/user/repo.git');
-    });
-  });
+
 
   describe('CORS Functionality', () => {
     test('OPTIONS preflight request with allowed origin', async () => {
