@@ -105,7 +105,10 @@ export const prepareProxyHeaders = (
     proxyHeaders['Authorization'] = authHeader
     if (enableLogging) {
       console.log(`🔐 AUTHORIZATION: Added auth header (${authHeader.substring(0, 15)}...)`)
+      console.log(`🔐 AUTH TYPE: ${authHeader.split(' ')[0]} authentication detected`)
     }
+  } else if (enableLogging) {
+    console.log(`🔐 NO AUTH: No authorization header found in request`)
   }
 
   // Set proper User-Agent for Git if not already set or not Git-specific

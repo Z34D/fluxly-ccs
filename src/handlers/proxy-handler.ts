@@ -96,6 +96,9 @@ export const handleGitProxy = async (c: Context, env: Env): Promise<Response> =>
  * Performs the fetch request with proper headers, body, and redirect handling.
  * This is separated from the main handler for easier testing and reusability.
  * 
+ * CRITICAL FIX: Properly handles request body to avoid ReadableStream locking
+ * issues that can cause 400 errors when Authorization header is present.
+ * 
  * @param {string} targetUrl - The complete URL to request
  * @param {Request} originalRequest - The original request for body/method
  * @param {Record<string, string>} headers - Prepared headers for the request
@@ -117,10 +120,29 @@ export const makeProxyRequest = async (
   originalRequest: Request,
   headers: Record<string, string>
 ): Promise<Response> => {
+  // CRITICAL FIX: Properly handle request body to avoid ReadableStream locking
+  // The issue was that originalRequest.body can become locked/consumed, causing 400 errors
+  let requestBody: BodyInit | null = null
+  
+  // Only read body for methods that typically have one
+  if (originalRequest.method === 'POST' || originalRequest.method === 'PUT' || originalRequest.method === 'PATCH') {
+    // Check if the body exists and hasn't been consumed
+    if (originalRequest.body && !originalRequest.bodyUsed) {
+      try {
+        // Clone the request to avoid consuming the original body
+        const clonedRequest = originalRequest.clone()
+        requestBody = clonedRequest.body
+      } catch (error) {
+        // If cloning fails, try to get the body as arrayBuffer
+        requestBody = await originalRequest.arrayBuffer()
+      }
+    }
+  }
+
   return await fetch(targetUrl, {
     method: originalRequest.method,
     headers: headers,
-    body: originalRequest.body,
+    body: requestBody,
     redirect: 'manual'  // Handle redirects manually to convert URLs
   })
 }
@@ -154,7 +176,11 @@ export const logProxyOperation = (
   console.log(`🔍 PROXY ${operation}: ${targetUrl}${durationText}`)
   
   if (hasAuth) {
-    console.log(`🔐 AUTH: Request includes authorization header`)
+    const authType = (headers['Authorization'] || headers['authorization']).split(' ')[0]
+    console.log(`🔐 AUTH: Request includes ${authType} authorization header`)
+    console.log(`🔐 HEADERS: ${Object.keys(headers).length} total headers forwarded`)
+  } else {
+    console.log(`🔐 NO AUTH: Request without authorization`)
   }
 }
 

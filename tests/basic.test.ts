@@ -334,6 +334,59 @@ describe('Fluxly-CCS - Comprehensive Test Suite', () => {
       
       console.log(`📋 Auth header forwarding test: ${response.status} (expected 401/403/404)`);
     });
+
+    test('should handle auth headers without ReadableStream body errors', async () => {
+      // REGRESSION TEST: This tests the fix for the authentication bug
+      // where Authorization headers caused 400 errors due to ReadableStream locking
+      
+      const testCases = [
+        {
+          name: "GET with Authorization header",
+          method: "GET",
+          url: urls.privateRepoInfoRefs(),
+          hasBody: false
+        },
+        {
+          name: "POST with Authorization header and body",
+          method: "POST", 
+          url: urls.publicRepoUploadPack(),
+          hasBody: true
+        }
+      ];
+
+      for (const testCase of testCases) {
+        console.log(`🧪 Testing ${testCase.name}...`);
+        
+        const requestOptions: RequestInit = {
+          method: testCase.method,
+          headers: {
+            "Origin": TEST_CONFIG.SERVER.BASE_URL,
+            "Authorization": "token fake-token-for-testing",
+            "User-Agent": "git/2.34.1",
+            "Content-Type": "application/x-git-upload-pack-request"
+          }
+        };
+
+        // Add a small body for POST requests to test ReadableStream handling
+        if (testCase.hasBody && testCase.method === "POST") {
+          requestOptions.body = new Uint8Array([0x00, 0x01, 0x02, 0x03]);
+        }
+
+        const response = await fetch(testCase.url, requestOptions);
+
+        // CRITICAL: Should NOT get 400 errors due to ReadableStream issues
+        // Should get proper Git protocol responses (401, 403, 404, or 200)
+        expect(response.status).not.toBe(400);
+        expect([200, 401, 403, 404]).toContain(response.status);
+        
+        console.log(`   ${testCase.name}: ${response.status} ${response.statusText} ✅`);
+        
+        // Verify CORS headers are present
+        expect(response.headers.get('access-control-allow-origin')).toBeTruthy();
+      }
+      
+      console.log('🎉 Authentication body handling test passed - no ReadableStream errors!');
+    });
   });
 
   describe('Authentication Security', () => {

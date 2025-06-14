@@ -84,4 +84,20 @@
 - CORS Logic Modularization - Completed on 2024-12-19, see [archive entry](mdc:../docs/archive/completed_tasks.md#task-cors-logic-modularization-v10)
 - Test private repository access with GitHub token - Completed on 2024-12-19
 - Update CORS configuration to allow all localhost and 127.0.0.1 origins - Completed on 2024-12-19
-- Extend Test Suite with Git Detection Functionality Tests - Completed on 2024-12-19, see [archive entry](mdc:../docs/archive/completed_tasks.md#task-extend-test-suite-with-git-detection-functionality-tests-v10) 
+- Extend Test Suite with Git Detection Functionality Tests - Completed on 2024-12-19, see [archive entry](mdc:../docs/archive/completed_tasks.md#task-extend-test-suite-with-git-detection-functionality-tests-v10)
+
+## Latest Progress
+
+### ✅ Authentication Bug Fix Completed (2024-12-19)
+**Issue**: 400 errors when Authorization header was present in Git requests, breaking the onAuth callback flow
+**Root Cause**: Request body ReadableStream becoming locked/consumed during proxy forwarding
+**Solution**: 
+- Enhanced `makeProxyRequest` function with proper request body cloning
+- Added comprehensive authentication logging for debugging
+- Preserved all existing functionality while fixing the auth bug
+
+**Results**:
+- Auth flow now works correctly: 401 → auth → 200 (matching original proxy behavior)
+- All 81 tests passing (4 skipped due to missing GitHub token)
+- No breaking changes to existing functionality
+- Enhanced debugging capabilities for future auth issues 

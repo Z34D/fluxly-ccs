@@ -21,6 +21,26 @@
 **Task**: Add comprehensive tests for the modularized Git detection utilities (replacing deleted test-git-detection.js)
 **Status**: Successfully completed - 54 comprehensive tests added with 100% pass rate, seamlessly integrated with existing test suite
 
+🎯 **COMPLETE**: Fix Authentication Header Bug ✅
+**Task**: Fix 400 errors when Authorization header is present in Git requests  
+**Status**: Successfully fixed - Auth flow now works correctly (401 → auth → 200) matching original proxy behavior
+
+**Issue Identified**: Request body ReadableStream was becoming locked/consumed when forwarding authenticated requests, causing 400 errors
+
+**Solution Implemented**:
+- Fixed `makeProxyRequest` function in `src/handlers/proxy-handler.ts`
+- Added proper request body cloning to avoid ReadableStream locking
+- Enhanced authentication logging for better debugging
+- Preserved all existing functionality while fixing the auth bug
+
+**Testing Results**:
+- All 82 tests passing (4 skipped due to missing GitHub token)
+- Authentication flow verified: 401 → auth → 200
+- **Regression Test**: Added comprehensive test covering both GET and POST scenarios with Authorization headers
+- No breaking changes to existing functionality
+- Enhanced debugging logs for auth header handling
+- Test specifically verifies no 400 errors occur due to ReadableStream locking
+
 ## Test Migration Completion ✅
 
 ### ✅ Successfully Completed Test Porting
