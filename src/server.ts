@@ -11,7 +11,6 @@
 
 import app from './app'
 import type { Env } from './types/environment'
-import { logStartup } from './config/server-config'
 
 /**
  * Local server environment configuration with defaults.
@@ -20,7 +19,7 @@ import { logStartup } from './config/server-config'
  */
 const serverEnv: Env = {
   PORT: process.env.PORT || "3000",
-  ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS || "https://fluxly.app",
+  ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS || "*",
   CORS_ALLOW_LOCALHOST: process.env.CORS_ALLOW_LOCALHOST || "true",
   CORS_ENABLE_LOGGING: process.env.CORS_ENABLE_LOGGING || "false",
   INSECURE_HTTP_ORIGINS: process.env.INSECURE_HTTP_ORIGINS
@@ -29,7 +28,13 @@ const serverEnv: Env = {
 /**
  * Log startup configuration for operational visibility.
  */
-logStartup(serverEnv)
+console.log('🚀 Starting Fluxly-CCS server...')
+console.log('📋 Environment Configuration:')
+console.log(`   PORT: ${serverEnv.PORT}`)
+console.log(`   ALLOWED_ORIGINS: ${serverEnv.ALLOWED_ORIGINS}`)
+console.log(`   INSECURE_HTTP_ORIGINS: ${serverEnv.INSECURE_HTTP_ORIGINS || 'none'}`)
+console.log(`   CORS_ALLOW_LOCALHOST: ${serverEnv.CORS_ALLOW_LOCALHOST}`)
+console.log(`   CORS_ENABLE_LOGGING: ${serverEnv.CORS_ENABLE_LOGGING}`)
 
 /**
  * Start the Bun server with the configured environment.

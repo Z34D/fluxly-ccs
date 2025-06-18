@@ -1,124 +1,83 @@
 /**
- * @fileoverview Constants and configuration values for Fluxly-CCS
+ * @fileoverview CORS Configuration Constants
  * 
- * This module defines constant values used throughout the application for
- * Git protocol detection, CORS headers, and proxy configuration.
+ * Contains all CORS-related configuration constants for the Git proxy server.
+ * These constants define which headers, methods, and protocols are allowed
+ * for cross-origin Git operations.
  * 
  * @author Fluxly
  * @version 2.0.0
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS CORS Documentation}
  */
 
 /**
- * Standard Git services supported by the proxy.
+ * Headers allowed for cross-origin requests (RFC 7231 compliant).
+ * Ported directly from cors-proxy-main middleware.js.
  * 
- * These service names are used in Git protocol requests to identify
- * the type of operation being performed.
- * 
- * @constant {readonly string[]}
+ * @constant {ReadonlyArray<string>}
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers CORS Headers Reference}
  */
-export const GIT_SERVICES = [
-  'git-upload-pack',    // Git fetch/clone operations
-  'git-receive-pack'    // Git push operations
-] as const
-
-/**
- * Standard Git-specific URL paths that indicate Git requests.
- * 
- * These path patterns are used to detect Git protocol requests
- * even when service parameters are not present.
- * 
- * @constant {readonly string[]}
- */
-export const GIT_PATHS = [
-  '/info/refs',         // Git info/refs endpoint
-  '.git/',              // Any path containing .git/
-  'git-upload-pack',    // Git fetch/clone operations endpoint
-  'git-receive-pack'    // Git push operations endpoint
-] as const
-
-/**
- * User-Agent prefixes that indicate Git client requests.
- * 
- * Git clients typically identify themselves with specific User-Agent headers.
- * This helps distinguish Git requests from regular web browser requests.
- * 
- * @constant {readonly string[]}
- */
-export const GIT_USER_AGENTS = [
-  'git/'               // Standard Git client User-Agent prefix
-] as const
-
-/**
- * HTTP headers that are allowed to be forwarded in proxy requests.
- * 
- * These headers are considered safe to forward from the client to the
- * target Git repository, including authentication and Git protocol headers.
- * 
- * @constant {readonly string[]}
- */
-export const ALLOWED_PROXY_HEADERS = [
+export const ALLOWED_HEADERS = [
   'accept-encoding',
   'accept-language', 
   'accept',
-  'authorization',      // Critical for authenticated Git operations
+  'access-control-allow-origin',
+  'authorization',
   'cache-control',
   'connection',
   'content-length',
   'content-type',
-  'git-protocol',       // Git-specific protocol header
+  'dnt',
+  'git-protocol',
   'pragma',
   'range',
   'referer',
-  'user-agent'
+  'user-agent',
+  'x-authorization',
+  'x-http-method-override',
+  'x-requested-with',
 ] as const
 
 /**
- * HTTP headers that should be exposed in CORS responses.
+ * Headers exposed to the client in cross-origin responses.
+ * Includes Git-specific headers and standard HTTP cache/metadata headers.
  * 
- * These headers are made available to the client JavaScript through
- * the Access-Control-Expose-Headers mechanism.
- * 
- * @constant {readonly string[]}
+ * @constant {ReadonlyArray<string>}
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers CORS Expose Headers}
  */
-export const EXPOSED_CORS_HEADERS = [
-  'content-type',
-  'content-length',
+export const EXPOSED_HEADERS = [
+  'accept-ranges',
+  'age',
   'cache-control',
+  'content-length',
+  'content-language',
+  'content-type',
+  'date',
   'etag',
-  'location'           // Important for Git redirect handling
+  'expires',
+  'last-modified',
+  'location',
+  'pragma',
+  'server',
+  'transfer-encoding',
+  'vary',
+  'x-github-request-id',
+  'x-redirected-url',
 ] as const
 
 /**
- * Default User-Agent string for proxy requests when none is provided.
+ * HTTP methods allowed for cross-origin Git operations.
+ * Supports Git's HTTP transport protocol requirements.
  * 
- * Used when the client doesn't provide a Git-specific User-Agent or
- * when we need to ensure the target server recognizes this as a Git request.
+ * @constant {ReadonlyArray<string>}
+ * @see {@link https://git-scm.com/docs/http-protocol Git HTTP Protocol}
+ */
+export const ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS'] as const
+
+/**
+ * Standard User-Agent for Git proxy requests.
+ * GitHub uses user-agent sniffing for git/* clients.
  * 
  * @constant {string}
  */
-export const DEFAULT_GIT_USER_AGENT = 'git/@hono-git/cors-proxy'
-
-/**
- * Default allowed origins when none are specified in environment.
- * 
- * @constant {readonly string[]}
- */
-export const DEFAULT_ALLOWED_ORIGINS = [
-  'https://fluxly.app'
-] as const
-
-/**
- * CORS configuration constants.
- * 
- * @constant {object}
- */
-export const CORS_CONFIG = {
-  /** CORS methods allowed for Git operations */
-  ALLOWED_METHODS: 'GET, POST, OPTIONS',
-  
-  /** CORS headers that clients are allowed to send */
-  ALLOWED_HEADERS: 'accept-encoding, accept-language, accept, authorization, cache-control, content-length, content-type, git-protocol, pragma, range, referer, user-agent',
-  
-  /** Maximum age for CORS preflight cache (24 hours) */
-  MAX_AGE: '86400'
-} as const 
+export const GIT_USER_AGENT = 'git/@isomorphic-git/cors-proxy' 

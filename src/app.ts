@@ -1,74 +1,51 @@
 /**
- * @fileoverview Main application file for Fluxly-CCS
+ * @fileoverview Fluxly-CCS Git Proxy Application
  * 
- * This module creates and configures the Hono application with all routes,
- * middleware, and handlers. It serves as the entry point that ties together
- * all the modular components of the proxy server.
+ * Main application factory following Hono best practices.
+ * Implements CORS-enabled Git operations for browser-based isomorphic-git usage.
+ * Uses app.route() pattern for proper route organization.
  * 
  * @author Fluxly
  * @version 2.0.0
+ * @see {@link https://github.com/isomorphic-git/cors-proxy Original cors-proxy}
+ * @see {@link https://hono.dev Hono Framework}
+ * @see {@link https://hono.dev/docs/guides/best-practices Hono Best Practices}
  */
 
 import { Hono } from 'hono'
 import type { Env } from './types/environment'
-import { logStartup } from './config/server-config'
-import {
-  handleHealth,
-  handleOptions,
-  handleUniversal
-} from './handlers/route-handlers'
+
+// Import route modules following Hono best practices
+import rootRoutes from './routes/root'
+import healthRoutes from './routes/health'
+import proxyRoutes from './routes/proxy'
 
 /**
- * Creates and configures the main Hono application.
+ * Creates and configures the main Hono application instance.
  * 
- * Sets up all routes and handlers for Fluxly-CCS:
- * - Health check endpoint
- * - CORS preflight handler
- * - Universal Git proxy router
+ * Follows Hono best practices by using app.route() to mount
+ * separate route modules for different functionalities:
+ * - Root route (/)
+ * - Health check routes (/health)
+ * - Git proxy routes (all other paths)
  * 
- * @returns {Hono} Configured Hono application instance
- * 
- * @example
- * ```typescript
- * const app = createApp()
- * export default app
- * ```
+ * @returns {Hono<{ Bindings: Env }>} Configured Hono application
+ * @see {@link https://hono.dev/docs/guides/building-a-larger-application Building Larger Applications}
  */
-export const createApp = (): Hono<{ Bindings: Env }> => {
+export function createApp(): Hono<{ Bindings: Env }> {
   const app = new Hono<{ Bindings: Env }>()
 
-  /**
-   * Health endpoint for monitoring and service discovery.
-   * 
-   * @route GET /health
-   * @returns {object} Server health and status information
-   */
-  app.get('/health', handleHealth)
-
-
-
-  /**
-   * CORS preflight handler for all routes.
-   * 
-   * Handles OPTIONS requests for Cross-Origin Resource Sharing
-   * by validating origins and setting appropriate headers.
-   * 
-   * @route OPTIONS /*
-   * @returns {string} Empty response with CORS headers
-   */
-  app.options('/*', handleOptions)
-
-  /**
-   * Universal handler for all HTTP methods and routes.
-   * 
-   * The main request router that processes all requests,
-   * validates CORS, detects Git requests, and forwards
-   * them to the appropriate handlers.
-   * 
-   * @route ALL /*
-   * @returns {Response} Proxied Git response or informational response
-   */
-  app.all('/*', handleUniversal)
+  // Mount root route
+  // Handles: GET /
+  app.route('/', rootRoutes)
+  
+  // Mount health check routes  
+  // Handles: GET /health
+  app.route('/health', healthRoutes)
+  
+  // Mount Git proxy routes for all other paths
+  // Handles: OPTIONS /*, ALL /* (Git operations)
+  app.route('/', proxyRoutes)
 
   return app
 }
@@ -77,18 +54,18 @@ export const createApp = (): Hono<{ Bindings: Env }> => {
  * The main Hono application instance.
  * 
  * This is the configured application that handles all requests
- * for Fluxly-CCS.
+ * and is exported for use by:
+ * - Cloudflare Workers runtime
+ * - Bun development server  
+ * - Testing frameworks
+ * 
+ * @type {Hono<{ Bindings: Env }>}
  */
 const app = createApp()
 
-
-
 /**
- * Export the configured Hono application.
+ * Default export of the configured Hono application.
  * 
- * This is used by:
- * - Cloudflare Workers runtime
- * - Bun development server
- * - Testing frameworks
+ * @see {@link createApp} Application factory function
  */
 export default app 
